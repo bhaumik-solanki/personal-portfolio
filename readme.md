@@ -55,7 +55,7 @@ Feel free to explore the different sections of the portfolio by clicking on the 
 
 ## Live Website
 
-You can view my personal portfolio website at [bhaumiksolanki.vercel.app](https://bhaumiksolanki.vercel.app).
+You can view my personal portfolio website at [bhaumiksolanki.vercel.app](https://bhaumiksolanki.netlify.app).
 
 ## License
 
