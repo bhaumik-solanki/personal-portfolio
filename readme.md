@@ -54,7 +54,7 @@ Feel free to explore the different sections of the portfolio by clicking on the 
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project does not have a specific license. If you would like to use or contribute to this project, please contact me for more information.
 
 ## Contact
 
