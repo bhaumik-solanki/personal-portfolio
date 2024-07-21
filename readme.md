@@ -38,12 +38,12 @@ To run this project locally, follow these steps:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/bhaumik-solanki/personal-portfolio.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd your-repo-name
+   cd personal-portfolio
    ```
 
 3. Open `index.html` in your preferred web browser to view the portfolio.
@@ -58,4 +58,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any inquiries, please contact me at [your-email@example.com](mailto:your-email@example.com) or visit my GitHub profile at [github.com/your-username](https://github.com/your-username).
+For any inquiries, please contact me at [bhaumiksolanki04@gmail.com](mailto:bhaumiksolanki04@gmail.com) or visit my GitHub profile at [github.com/bhaumik-solanki](https://github.com/bhaumik-solanki).
