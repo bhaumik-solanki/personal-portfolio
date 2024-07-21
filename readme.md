@@ -9,8 +9,9 @@ Welcome to my personal portfolio repository! This project showcases my skills, e
 3. [Technologies Used](#technologies-used)
 4. [Installation](#installation)
 5. [Usage](#usage)
-6. [License](#license)
-7. [Contact](#contact)
+6. [Live Website](#live-website)
+7. [License](#license)
+8. [Contact](#contact)
 
 ## Introduction
 
@@ -51,6 +52,10 @@ To run this project locally, follow these steps:
 ## Usage
 
 Feel free to explore the different sections of the portfolio by clicking on the navigation buttons. You can also view the code and contribute by opening issues or making pull requests.
+
+## Live Website
+
+You can view my personal portfolio website at [bhaumiksolanki.vercel.app](https://bhaumiksolanki.vercel.app).
 
 ## License
 
