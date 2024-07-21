@@ -58,4 +58,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any inquiries, please contact me at [bhaumiksolanki04@gmail.com](mailto:bhaumiksolanki04@gmail.com) or visit my GitHub profile at [github.com/bhaumik-solanki](https://github.com/bhaumik-solanki).
+For any inquiries, please contact me at [bhaumiksolanki04@gmail.com](mailto:bhaumiksolanki04@gmail.com) or visit my GitHub profile at [github.com/bhaumik-solanki](https://github.com/bhaumik-solanki/).
