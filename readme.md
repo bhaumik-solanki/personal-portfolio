@@ -5,17 +5,22 @@ Welcome to my personal portfolio repository! This project showcases my skills, e
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Features](#features)
-3. [Technologies Used](#technologies-used)
-4. [Installation](#installation)
-5. [Usage](#usage)
-6. [Live Website](#live-website)
-7. [License](#license)
-8. [Contact](#contact)
+2. [Live Website](#live-website)
+3. [Features](#features)
+4. [Technologies Used](#technologies-used)
+5. [Current Limitations and Future Improvements](#Current Limitations and Future Improvements)
+6. [Installation](#installation)
+7. [Usage](#usage)
+8. [License](#license)
+9. [Contact](#contact)
 
 ## Introduction
 
 This portfolio website is a reflection of my journey as a developer. It includes information about my skills, work experience, and projects. The site is designed to be both functional and visually appealing, showcasing my abilities in web development and design.
+
+## Live Website
+
+You can view my personal portfolio website at [bhaumiksolanki.netlify.app](https://bhaumiksolanki.netlify.app).
 
 ## Features
 
@@ -32,6 +37,11 @@ This portfolio website is a reflection of my journey as a developer. It includes
 - **CSS**: For styling and layout of the website.
 - **JavaScript**: For interactive features and dynamic content.
 - **Typed.js**: For creating dynamic text animations.
+
+## Current Limitations and Future Improvements
+
+The contact form is not yet functional as the backend and database integration is pending. This feature will be enabled once I have gained the necessary backend development skills.
+Currently, the site is optimized for screens with a width of 800-900px. I am actively working on improving responsiveness for smaller screen sizes and will implement these updates shortly.
 
 ## Installation
 
@@ -52,15 +62,6 @@ To run this project locally, follow these steps:
 ## Usage
 
 Feel free to explore the different sections of the portfolio by clicking on the navigation buttons. You can also view the code and contribute by opening issues or making pull requests.
-
-## Live Website
-
-You can view my personal portfolio website at [bhaumiksolanki.netlify.app](https://bhaumiksolanki.netlify.app).
-
-### Current Limitations and Future Improvements
-
-The contact form is not yet functional as the backend and database integration is pending. This feature will be enabled once I have gained the necessary backend development skills.
-Currently, the site is optimized for screens with a width of 800-900px. I am actively working on improving responsiveness for smaller screen sizes and will implement these updates shortly.
 
 ## License
 
