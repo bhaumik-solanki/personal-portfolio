@@ -57,6 +57,11 @@ Feel free to explore the different sections of the portfolio by clicking on the 
 
 You can view my personal portfolio website at [bhaumiksolanki.netlify.app](https://bhaumiksolanki.netlify.app).
 
+### Current Limitations and Future Improvements
+
+The contact form is not yet functional as the backend and database integration is pending. This feature will be enabled once I have gained the necessary backend development skills.
+Currently, the site is optimized for screens with a width of 800-900px. I am actively working on improving responsiveness for smaller screen sizes and will implement these updates shortly.
+
 ## License
 
 This project does not have a specific license. If you would like to use or contribute to this project, please contact me for more information.
