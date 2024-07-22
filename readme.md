@@ -8,7 +8,7 @@ Welcome to my personal portfolio repository! This project showcases my skills, e
 2. [Live Website](#live-website)
 3. [Features](#features)
 4. [Technologies Used](#technologies-used)
-5. [Current Limitations and Future Improvements](#Current Limitations and Future Improvements)
+5. [Current Limitations and Future Improvements](#current-limitations-and-future-improvements)
 6. [Installation](#installation)
 7. [Usage](#usage)
 8. [License](#license)
