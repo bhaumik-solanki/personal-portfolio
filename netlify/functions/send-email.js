@@ -1,17 +1,14 @@
 exports.handler = async (event, context) => {
-  // Enable CORS
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 
-  // Handle preflight
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers, body: "" };
   }
 
-  // Only allow POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -23,7 +20,6 @@ exports.handler = async (event, context) => {
   try {
     const { name, email, subject, message } = JSON.parse(event.body);
 
-    // Validate
     if (!name || !email || !subject || !message) {
       return {
         statusCode: 400,
@@ -32,8 +28,8 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Use EmailJS REST API directly
-    const emailJSResponse = await fetch(
+    // Send main contact email (to you)
+    const mainEmailResponse = await fetch(
       "https://api.emailjs.com/api/v1.0/email/send",
       {
         method: "POST",
@@ -42,27 +38,51 @@ exports.handler = async (event, context) => {
         },
         body: JSON.stringify({
           service_id: process.env.EMAILJS_SERVICE_ID,
-          template_id: process.env.EMAILJS_TEMPLATE_ID,
+          template_id: process.env.EMAILJS_TEMPLATE_ID, // Make sure this is your MAIN template
           user_id: process.env.EMAILJS_PUBLIC_KEY,
-          accessToken: process.env.EMAILJS_PRIVATE_KEY,
+          accessToken: process.env.EMAILJS_PRIVATE_KEY, // This MUST be your private key
           template_params: {
             name: name,
             email: email,
             subject: subject,
             message: message,
-            to_email: process.env.TO_EMAIL || "bhaumik.solanki@gmail.com",
+            to_email: process.env.TO_EMAIL,
           },
         }),
       }
     );
 
-    if (!emailJSResponse.ok) {
-      const errorText = await emailJSResponse.text();
-      console.error("EmailJS API error:", errorText);
-      throw new Error(`EmailJS API error: ${emailJSResponse.status}`);
+    if (!mainEmailResponse.ok) {
+      const errorText = await mainEmailResponse.text();
+      console.error("Main email failed:", mainEmailResponse.status, errorText);
+      throw new Error(`EmailJS API error: ${mainEmailResponse.status}`);
     }
 
-    console.log("Email sent successfully");
+    // Optionally send auto-reply
+    if (process.env.EMAILJS_AUTOREPLY_TEMPLATE_ID) {
+      try {
+        await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            service_id: process.env.EMAILJS_SERVICE_ID,
+            template_id: process.env.EMAILJS_AUTOREPLY_TEMPLATE_ID,
+            user_id: process.env.EMAILJS_PUBLIC_KEY,
+            accessToken: process.env.EMAILJS_PRIVATE_KEY,
+            template_params: {
+              name: name,
+              email: email,
+              subject: subject,
+            },
+          }),
+        });
+      } catch (autoReplyError) {
+        console.error("Auto-reply failed:", autoReplyError);
+        // Don't fail the whole request if auto-reply fails
+      }
+    }
 
     return {
       statusCode: 200,
