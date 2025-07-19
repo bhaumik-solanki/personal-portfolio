@@ -134,7 +134,7 @@ const Footer = () => {
         {showScrollTop && (
           <motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-lavender-500 to-lavender-700 rounded-full flex items-center justify-center text-white shadow-lg hover-glow cursor-pointer hover:shadow-2xl transition-all duration-300"
+            className="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-lavender-500 to-lavender-700 rounded-full flex items-center justify-center text-white shadow-lg hover-glow cursor-pointer hover:shadow-2xl transition-all duration-200"
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0 }}
