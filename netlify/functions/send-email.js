@@ -1,6 +1,6 @@
-const { Resend } = require("resend");
+import { Resend } from "resend";
 
-exports.handler = async (event, context) => {
+export async function handler(event, context) {
   // Enable CORS
   const headers = {
     "Access-Control-Allow-Origin": "*",
@@ -259,4 +259,4 @@ exports.handler = async (event, context) => {
       }),
     };
   }
-};
+}
