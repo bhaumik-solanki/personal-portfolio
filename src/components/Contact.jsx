@@ -34,7 +34,7 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("../../netlify/functions/send-email.js", {
+      const response = await fetch("/.netlify/functions/send-email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,17 +43,21 @@ const Contact = () => {
       });
 
       const data = await response.json();
+      console.log("Response:", data); // Debug log
 
       if (response.ok) {
         setSubmitStatus("success");
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         setSubmitStatus("error");
-        console.error("Email error:", data.error);
+        console.error("Email error:", data);
+        // Optionally show the specific error to user
+        alert(`Error: ${data.error || "Unknown error"}`);
       }
     } catch (error) {
       setSubmitStatus("error");
       console.error("Submit error:", error);
+      alert("Network error. Please check console.");
     } finally {
       setIsSubmitting(false);
       setTimeout(() => setSubmitStatus(null), 5000);
