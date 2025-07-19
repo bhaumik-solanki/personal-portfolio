@@ -43,7 +43,7 @@ const Contact = () => {
       });
 
       const data = await response.json();
-      console.log("Response:", data); // Debug log
+      console.log("Response:", data);
 
       if (response.ok) {
         setSubmitStatus("success");
@@ -51,13 +51,10 @@ const Contact = () => {
       } else {
         setSubmitStatus("error");
         console.error("Email error:", data);
-        // Optionally show the specific error to user
-        alert(`Error: ${data.error || "Unknown error"}`);
       }
     } catch (error) {
       setSubmitStatus("error");
       console.error("Submit error:", error);
-      alert("Network error. Please check console.");
     } finally {
       setIsSubmitting(false);
       setTimeout(() => setSubmitStatus(null), 5000);
@@ -76,13 +73,73 @@ const Contact = () => {
         </motion.h2>
 
         <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Info - same as before */}
+          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.2 }}
           >
-            {/* ... contact info content ... */}
+            <h3 className="text-2xl font-semibold mb-6 text-lavender-400">
+              Let's Connect
+            </h3>
+            <p className="text-gray-400 mb-8">
+              I'm always open to discussing new opportunities, collaborations,
+              or just having a chat about technology and innovation.
+            </p>
+
+            <div className="space-y-6">
+              <motion.div
+                whileHover={{ x: 10 }}
+                className="flex items-center space-x-4"
+              >
+                <div className="w-12 h-12 bg-lavender-600/20 rounded-lg flex items-center justify-center text-lavender-400">
+                  <FaEnvelope />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Email</p>
+                  <p className="text-gray-300">bhaumik.solanki@email.com</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ x: 10 }}
+                className="flex items-center space-x-4"
+              >
+                <div className="w-12 h-12 bg-lavender-600/20 rounded-lg flex items-center justify-center text-lavender-400">
+                  <FaPhone />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Phone</p>
+                  <p className="text-gray-300">+91 98765 43210</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ x: 10 }}
+                className="flex items-center space-x-4"
+              >
+                <div className="w-12 h-12 bg-lavender-600/20 rounded-lg flex items-center justify-center text-lavender-400">
+                  <FaMapMarkerAlt />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Location</p>
+                  <p className="text-gray-300">India</p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Decorative element */}
+            <div className="mt-12 relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-lavender-500 to-lavender-700 rounded-lg blur-xl opacity-30"></div>
+              <div className="relative glass-effect rounded-lg p-6 text-center">
+                <p className="text-lavender-400 font-medium">
+                  Open to opportunities
+                </p>
+                <p className="text-gray-400 text-sm mt-2">
+                  Available for freelance and full-time positions
+                </p>
+              </div>
+            </div>
           </motion.div>
 
           {/* Contact Form */}
