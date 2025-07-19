@@ -30,7 +30,7 @@ exports.handler = async (event, context) => {
 
     // Send main contact email (to you)
     const mainEmailResponse = await fetch(
-      "https://api.emailjs.com/api/v1.0/email/send",
+      "https://api.emailjs.com/api/v1.0/email/send-form",
       {
         method: "POST",
         headers: {
