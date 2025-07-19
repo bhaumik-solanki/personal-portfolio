@@ -1,6 +1,6 @@
-exports.handler = async (event, context) => {
-  console.log("Function triggered"); // Debug log
+const emailjs = require("@emailjs/nodejs");
 
+exports.handler = async (event, context) => {
   // Enable CORS
   const headers = {
     "Access-Control-Allow-Origin": "*",
@@ -8,16 +8,12 @@ exports.handler = async (event, context) => {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 
-  // Handle preflight requests
+  // Handle preflight
   if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers,
-      body: "",
-    };
+    return { statusCode: 200, headers, body: "" };
   }
 
-  // Only allow POST requests
+  // Only allow POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -27,12 +23,10 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    console.log("Parsing body..."); // Debug log
     const { name, email, subject, message } = JSON.parse(event.body);
 
-    // Validate required fields
+    // Validate
     if (!name || !email || !subject || !message) {
-      console.log("Missing required fields"); // Debug log
       return {
         statusCode: 400,
         headers,
@@ -40,44 +34,46 @@ exports.handler = async (event, context) => {
       };
     }
 
-    console.log("Checking environment variables..."); // Debug log
+    // Log for debugging
+    console.log("Attempting to send email for:", name);
 
-    // Check if environment variables exist
-    if (
-      !process.env.EMAILJS_SERVICE_ID ||
-      !process.env.EMAILJS_TEMPLATE_ID ||
-      !process.env.EMAILJS_PUBLIC_KEY
-    ) {
-      console.error("Missing EmailJS environment variables");
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({
-          error: "Email service not configured properly",
-        }),
-      };
-    }
+    // Initialize EmailJS
+    emailjs.init({
+      publicKey: process.env.EMAILJS_PUBLIC_KEY,
+      privateKey: process.env.EMAILJS_PRIVATE_KEY,
+    });
 
-    // For now, let's test without actually sending email
-    // This will help us identify if the issue is with the function or EmailJS
-    console.log("Would send email with:", { name, email, subject, message });
+    // Send email
+    const response = await emailjs.send(
+      process.env.EMAILJS_SERVICE_ID,
+      process.env.EMAILJS_TEMPLATE_ID,
+      {
+        name: name,
+        email: email,
+        subject: subject,
+        message: message,
+        to_email: process.env.TO_EMAIL || "bhaumik.solanki@gmail.com",
+      }
+    );
+
+    console.log("Email sent successfully:", response.status);
 
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         success: true,
-        message: "Test successful - Email function is working!",
+        message: "Email sent successfully!",
       }),
     };
   } catch (error) {
-    console.error("Function error:", error);
+    console.error("Email error:", error);
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: "Failed to process request",
-        details: error.message,
+        error: "Failed to send email",
+        details: error.text || error.message,
       }),
     };
   }
