@@ -1,14 +1,19 @@
+const { Resend } = require("resend");
+
 exports.handler = async (event, context) => {
+  // Enable CORS
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 
+  // Handle preflight
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers, body: "" };
   }
 
+  // Only allow POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -20,6 +25,7 @@ exports.handler = async (event, context) => {
   try {
     const { name, email, subject, message } = JSON.parse(event.body);
 
+    // Validate
     if (!name || !email || !subject || !message) {
       return {
         statusCode: 400,
@@ -28,61 +34,211 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Send main contact email (to you)
-    const mainEmailResponse = await fetch(
-      "https://api.emailjs.com/api/v1.0/email/send-form",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          service_id: process.env.EMAILJS_SERVICE_ID,
-          template_id: process.env.EMAILJS_TEMPLATE_ID, // Make sure this is your MAIN template
-          user_id: process.env.EMAILJS_PUBLIC_KEY,
-          accessToken: process.env.EMAILJS_PRIVATE_KEY, // This MUST be your private key
-          template_params: {
-            name: name,
-            email: email,
-            subject: subject,
-            message: message,
-            to_email: process.env.TO_EMAIL,
-          },
-        }),
-      }
-    );
+    // Initialize Resend with your API key
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    if (!mainEmailResponse.ok) {
-      const errorText = await mainEmailResponse.text();
-      console.error("Main email failed:", mainEmailResponse.status, errorText);
-      throw new Error(`EmailJS API error: ${mainEmailResponse.status}`);
-    }
+    // 1. Send notification email to you
+    const notificationEmail = await resend.emails.send({
+      from: `${name} <onboarding@resend.dev>`, // Or your verified domain
+      to: [process.env.TO_EMAIL || "bhaumik.solanki@gmail.com"],
+      subject: `Portfolio Contact: ${subject}`,
+      reply_to: email,
+      html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: "Segoe UI", sans-serif;
+              color: #333;
+              background: #f4f4f7;
+              padding: 30px;
+            }
+            .container {
+              max-width: 600px;
+              margin: auto;
+              background: #fff;
+              border-radius: 8px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+              overflow: hidden;
+            }
+            .header {
+              background-color: #8b5cf6;
+              color: #fff;
+              padding: 24px;
+              text-align: center;
+            }
+            .content {
+              padding: 24px;
+            }
+            .field {
+              margin-bottom: 16px;
+            }
+            .label {
+              font-size: 12px;
+              color: #888;
+              font-weight: 600;
+              text-transform: uppercase;
+              margin-bottom: 4px;
+            }
+            .value {
+              font-size: 15px;
+              line-height: 1.5;
+            }
+            .message {
+              white-space: pre-wrap;
+              background: #f9f9f9;
+              padding: 16px;
+              border-radius: 6px;
+              font-size: 14px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h2>New Message</h2>
+              <p>You've received a message via your portfolio website</p>
+            </div>
+            <div class="content">
+              <div class="field">
+                <div class="label">Name</div>
+                <div class="value">${name}</div>
+              </div>
+              <div class="field">
+                <div class="label">Email</div>
+                <div class="value">${email}</div>
+              </div>
+              <div class="field">
+                <div class="label">Subject</div>
+                <div class="value">${subject}</div>
+              </div>
+              <div class="field">
+                <div class="label">Message</div>
+                <div class="message">${message.replace(/\n/g, "<br />")}</div>
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
 
-    // Optionally send auto-reply
-    if (process.env.EMAILJS_AUTOREPLY_TEMPLATE_ID) {
-      try {
-        await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            service_id: process.env.EMAILJS_SERVICE_ID,
-            template_id: process.env.EMAILJS_AUTOREPLY_TEMPLATE_ID,
-            user_id: process.env.EMAILJS_PUBLIC_KEY,
-            accessToken: process.env.EMAILJS_PRIVATE_KEY,
-            template_params: {
-              name: name,
-              email: email,
-              subject: subject,
-            },
-          }),
-        });
-      } catch (autoReplyError) {
-        console.error("Auto-reply failed:", autoReplyError);
-        // Don't fail the whole request if auto-reply fails
-      }
-    }
+      `,
+      text: `
+      New message received on Portfolio website
+      Name: ${name}
+      Email: ${email}
+      Subject: ${subject}
+      Message:
+      ${message}
+      `,
+    });
+
+    // 2. Send auto-reply to the person who submitted the form
+    const autoReplyEmail = await resend.emails.send({
+      from: "Bhaumik Solanki <onboarding@resend.dev>", // Or your verified domain
+      to: [email],
+      subject: `Thank you for reaching out, ${name}!`,
+      reply_to: process.env.TO_EMAIL || "bhaumik.solanki@gmail.com",
+      html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: "Segoe UI", sans-serif;
+              color: #333;
+              background: #f8f9fa;
+              padding: 30px;
+            }
+            .container {
+              max-width: 600px;
+              margin: auto;
+              background: #fff;
+              border-radius: 10px;
+              overflow: hidden;
+              box-shadow: 0 0 12px rgba(0, 0, 0, 0.06);
+            }
+            .header {
+              background: linear-gradient(135deg, #7c3aed, #a78bfa);
+              color: #fff;
+              text-align: center;
+              padding: 40px 20px;
+            }
+            .content {
+              padding: 30px 20px;
+            }
+            .footer {
+              background: #f1f3f5;
+              padding: 20px;
+              text-align: center;
+              font-size: 13px;
+              color: #666;
+            }
+            .button {
+              display: inline-block;
+              margin-top: 24px;
+              background-color: #7c3aed;
+              color: white;
+              padding: 12px 24px;
+              border-radius: 5px;
+              text-decoration: none;
+              font-weight: 500;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Thanks for reaching out, ${name}!</h1>
+            </div>
+            <div class="content">
+              <p>Hi ${name},</p>
+              <p>
+                Thank you for contacting me. I've received your message and I
+                appreciate you taking the time to reach out. I'll get back to you as
+                soon as possible.
+              </p>
+              <p>Here's a quick summary of what you shared:</p>
+              <strong>Subject:</strong> ${subject}
+              <p>
+                If you have any urgent matters, please don't hesitate to reach out
+                again.
+              </p>
+              <p>Looking forward to connecting with you!</p>
+              <p>
+                Best regards,<br />
+                <strong>Bhaumik Solanki</strong>
+              </p>
+            </div>
+            <div class="footer">
+              This is an automated confirmation that your message was received.<br />
+              Please don't reply directly to this email.
+            </div>
+          </div>
+        </body>
+      </html>
+      `,
+      text: `
+        Hi ${name},
+        
+        Thank you for contacting me. I've received your message and I appreciate you taking the time to reach out. I'll get back to you as soon as possible.
+        
+        Here's a quick summary of what you shared:
+        Subject: ${subject}
+        
+        If you have any urgent matters, please don't hesitate to reach out again.
+
+        Looking forward to connecting with you!
+
+        Best regards,
+        Bhaumik Solanki
+        `,
+    });
+
+    console.log("Emails sent successfully:", {
+      notificationEmail,
+      autoReplyEmail,
+    });
 
     return {
       statusCode: 200,

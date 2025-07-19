@@ -97,7 +97,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">Email</p>
-                  <p className="text-gray-300">bhaumik.solanki@email.com</p>
+                  <p className="text-gray-300">bhaumiksolanki04@gmail.com</p>
                 </div>
               </motion.div>
 
@@ -110,7 +110,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">Phone</p>
-                  <p className="text-gray-300">+91 98765 43210</p>
+                  <p className="text-gray-300">+91 70117 47574</p>
                 </div>
               </motion.div>
 
@@ -123,7 +123,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">Location</p>
-                  <p className="text-gray-300">India</p>
+                  <p className="text-gray-300">Delhi, India</p>
                 </div>
               </motion.div>
             </div>
