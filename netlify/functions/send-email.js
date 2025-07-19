@@ -1,5 +1,3 @@
-const emailjs = require("@emailjs/nodejs");
-
 exports.handler = async (event, context) => {
   // Enable CORS
   const headers = {
@@ -34,29 +32,37 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Log for debugging
-    console.log("Attempting to send email for:", name);
-
-    // Initialize EmailJS
-    emailjs.init({
-      publicKey: process.env.EMAILJS_PUBLIC_KEY,
-      privateKey: process.env.EMAILJS_PRIVATE_KEY,
-    });
-
-    // Send email
-    const response = await emailjs.send(
-      process.env.EMAILJS_SERVICE_ID,
-      process.env.EMAILJS_TEMPLATE_ID,
+    // Use EmailJS REST API directly
+    const emailJSResponse = await fetch(
+      "https://api.emailjs.com/api/v1.0/email/send",
       {
-        name: name,
-        email: email,
-        subject: subject,
-        message: message,
-        to_email: process.env.TO_EMAIL || "bhaumik.solanki@gmail.com",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          service_id: process.env.EMAILJS_SERVICE_ID,
+          template_id: process.env.EMAILJS_TEMPLATE_ID,
+          user_id: process.env.EMAILJS_PUBLIC_KEY,
+          accessToken: process.env.EMAILJS_PRIVATE_KEY,
+          template_params: {
+            name: name,
+            email: email,
+            subject: subject,
+            message: message,
+            to_email: process.env.TO_EMAIL || "bhaumik.solanki@gmail.com",
+          },
+        }),
       }
     );
 
-    console.log("Email sent successfully:", response.status);
+    if (!emailJSResponse.ok) {
+      const errorText = await emailJSResponse.text();
+      console.error("EmailJS API error:", errorText);
+      throw new Error(`EmailJS API error: ${emailJSResponse.status}`);
+    }
+
+    console.log("Email sent successfully");
 
     return {
       statusCode: 200,
@@ -67,13 +73,13 @@ exports.handler = async (event, context) => {
       }),
     };
   } catch (error) {
-    console.error("Email error:", error);
+    console.error("Email send error:", error);
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
         error: "Failed to send email",
-        details: error.text || error.message,
+        details: error.message,
       }),
     };
   }
