@@ -134,6 +134,7 @@ export async function handler(event, context) {
       ${message}
       `,
     });
+    console.log("Notification email full response:", notificationEmail);
     console.log("Notification email sent successfully:", notificationEmail.id);
 
     // 2. Send auto-reply - with error handling
@@ -145,9 +146,9 @@ export async function handler(event, context) {
 
       const autoReplyEmail = await resend.emails.send({
         from: "Bhaumik Solanki <onboarding@resend.dev>",
-        to: email, // Changed from array to string
+        to: [email], // Changed from array to string
         subject: `Thank you for reaching out, ${name}!`,
-        reply_to: process.env.TO_EMAIL || "bhaumik.solanki@gmail.com",
+        reply_to: [process.env.TO_EMAIL || "bhaumik.solanki@gmail.com"],
         html: `
         <!DOCTYPE html>
         <html>
@@ -233,7 +234,7 @@ export async function handler(event, context) {
           Bhaumik Solanki
         `,
       });
-
+      console.log("Auto-reply email full response:", autoReplyEmail);
       console.log("Auto-reply sent successfully:", autoReplyEmail.id);
       autoReplyStatus = "sent";
     } catch (autoError) {
