@@ -1,72 +1,82 @@
-const emailjs = require("@emailjs/nodejs");
-
 exports.handler = async (event, context) => {
+  console.log("Function triggered"); // Debug log
+
+  // Enable CORS
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+
+  // Handle preflight requests
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers,
+      body: "",
+    };
+  }
+
   // Only allow POST requests
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: "Method not allowed" }),
     };
   }
 
   try {
-    // Parse the form data
+    console.log("Parsing body..."); // Debug log
     const { name, email, subject, message } = JSON.parse(event.body);
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
+      console.log("Missing required fields"); // Debug log
       return {
         statusCode: 400,
+        headers,
         body: JSON.stringify({ error: "All fields are required" }),
       };
     }
 
-    // Initialize EmailJS with private key (server-side only)
-    emailjs.init({
-      publicKey: process.env.EMAILJS_PUBLIC_KEY,
-      privateKey: process.env.EMAILJS_PRIVATE_KEY, // New - needed for server-side
-    });
+    console.log("Checking environment variables..."); // Debug log
 
-    // Send the main contact email
-    const response = await emailjs.send(
-      process.env.EMAILJS_SERVICE_ID,
-      process.env.EMAILJS_TEMPLATE_ID,
-      {
-        name,
-        email,
-        subject,
-        message,
-        to_email: process.env.TO_EMAIL, // Your email
-      }
-    );
-
-    // Optionally send auto-reply
-    if (process.env.EMAILJS_AUTOREPLY_TEMPLATE_ID) {
-      await emailjs.send(
-        process.env.EMAILJS_SERVICE_ID,
-        process.env.EMAILJS_AUTOREPLY_TEMPLATE_ID,
-        {
-          name,
-          email,
-          subject,
-          message,
-        }
-      );
+    // Check if environment variables exist
+    if (
+      !process.env.EMAILJS_SERVICE_ID ||
+      !process.env.EMAILJS_TEMPLATE_ID ||
+      !process.env.EMAILJS_PUBLIC_KEY
+    ) {
+      console.error("Missing EmailJS environment variables");
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: "Email service not configured properly",
+        }),
+      };
     }
+
+    // For now, let's test without actually sending email
+    // This will help us identify if the issue is with the function or EmailJS
+    console.log("Would send email with:", { name, email, subject, message });
 
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({
         success: true,
-        message: "Email sent successfully!",
+        message: "Test successful - Email function is working!",
       }),
     };
   } catch (error) {
-    console.error("Email send error:", error);
+    console.error("Function error:", error);
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({
-        error: "Failed to send email",
+        error: "Failed to process request",
         details: error.message,
       }),
     };
