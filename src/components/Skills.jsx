@@ -89,7 +89,6 @@ const Skills = () => {
               key={category.title}
               initial={{ opacity: 0, x: categoryIndex % 2 === 0 ? -50 : 50 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: categoryIndex * 0.2 }}
             >
               <h3 className="text-2xl font-semibold mb-6 text-lavender-400">
                 {category.title}
@@ -100,8 +99,7 @@ const Skills = () => {
                     key={skill.name}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ delay: categoryIndex * 0.2 + index * 0.1 }}
-                    whileHover={{ y: -10, scale: 1.05 }}
+                    whileHover={{ scale: 1.05 }}
                     className="glass-effect rounded-xl p-6 text-center hover-glow cursor-pointer"
                   >
                     <div className="text-4xl mb-3 text-lavender-400 flex justify-center">

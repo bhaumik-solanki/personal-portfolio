@@ -93,7 +93,7 @@ const Achievements = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.05 }}
+              whileHover={{ scale: 1.05 }}
               className="glass-effect rounded-xl p-6 hover-glow"
             >
               <div className="flex items-center mb-4">

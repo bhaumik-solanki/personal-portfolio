@@ -45,7 +45,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center md:text-left"
+            className="text-center md:text-left justify-center"
           >
             <h2 className="text-xl md:text-2xl text-lavender-400 mb-4 font-medium">
               Hello, I'm
@@ -149,7 +149,7 @@ const Hero = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative flex justify-end"
+            className="relative flex justify-center"
           >
             <div className="relative w-64 h-64 md:w-80 md:h-80">
               {/* Glow effect */}

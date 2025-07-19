@@ -54,7 +54,6 @@ const Education = () => {
               key={index}
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: index * 0.2 }}
               whileHover={{ scale: 1.02 }}
               className="glass-effect rounded-xl p-8 mb-8 hover-glow"
             >
@@ -91,7 +90,6 @@ const Education = () => {
                     key={i}
                     initial={{ opacity: 0, x: -20 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: index * 0.2 + i * 0.1 }}
                     className="text-gray-400 flex items-start"
                   >
                     <span className="text-lavender-400 mr-2">▸</span>

@@ -64,7 +64,6 @@ const Experience = () => {
               key={index}
               initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: index * 0.2 }}
               className="relative mb-12 last:mb-0"
             >
               {/* Timeline line */}
@@ -108,7 +107,6 @@ const Experience = () => {
                         key={i}
                         initial={{ opacity: 0, x: -20 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ delay: index * 0.2 + i * 0.1 }}
                         className="text-gray-400 flex items-start"
                       >
                         <span className="text-lavender-400 mr-2">▸</span>
